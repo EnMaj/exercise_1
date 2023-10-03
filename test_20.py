@@ -4,71 +4,58 @@ hundreds = ['', 'сто', 'двести', 'триста', 'четыреста', 
 thousands = ['', 'одна тысяча', 'две тысячи', 'три тысячи', 'четыре тысячи']
 
 
-def _one_convert(integer):
+def one_transfer(integer):
         return one_to_nineteen[integer]
 
-def _two_convert(integer, string):
+def two_transfer(integer, string):
         if integer in range(20):
                 result = one_to_nineteen[integer]
-
         else:
                 result = decs[int(string[0])]
 
                 if string[1] != '0':
                         result = '%s %s' % (result, one_to_nineteen[int(string[1])])
-
         return result
 
 
-def convert(string):
+def transfer(string):
         length = len(string)
         integer = int(string)
-
         if length == 1:
-                result = _one_convert(integer)
-
+                result = one_transfer(integer)
         elif length == 2:
-                result = _two_convert(integer, string)
-
+                result = two_transfer(integer, string)
         elif length == 3:
                 result = hundreds[int(string[0])]
-
-                tail = string[-2:]
-
-                if tail != '00':
-                        result = '%s %s' % (result, convert(tail))
+                ending = string[-2:]
+                if ending != '00':
+                        result = '%s %s' % (result, transfer(ending))
 
         elif length in range(4, 7):
-                tail = convert(string[-3:])
-
-                str_head = string[:-3]
-                int_head = int(str_head)
-
-                if int_head in range(1, 5):
-                        head = thousands[int_head]
-
+                ending = transfer(string[-3:])
+                str_starting = string[:-3]
+                int_starting = int(str_starting)
+                if int_starting in range(1, 5):
+                        starting = thousands[int_starting]
                 else:
-                        head = '%s тысяч' % (convert(str_head))
+                        starting = '%s тысяч' % (transfer(str_starting))
 
-                result = '%s %s' % (head, tail)
+                result = '%s %s' % (starting, ending)
         elif length in range (7,10):
-                tail = convert(string[-6:])
-
-                str_head = string[:-6]
-                int_head = int(str_head)
-
-                if int_head%10 in range(2,5):
-                        head = '%s миллиона' % (convert(str_head))
-                elif int_head%10 == 1 and int_head%100!=11:
-                        head = '%s миллион' % (convert(str_head))
+                ending = transfer(string[-6:])
+                str_starting = string[:-6]
+                int_starting = int(str_starting)
+                if int_starting%10 in range(2,5):
+                        starting = '%s миллиона' % (transfer(str_starting))
+                elif int_starting%10 == 1 and int_starting%100!=11:
+                        starting = '%s миллион' % (transfer(str_starting))
                 else:
-                        head = '%s миллионов' % (convert(str_head))
-                result = '%s %s' % (head, tail)
+                        starting = '%s миллионов' % (transfer(str_starting))
+                result = '%s %s' % (starting, ending)
         else:
                 result = ''
-
         return result.strip()
 
 
 number = input()
-print(convert(number))
+print(transfer(number))
