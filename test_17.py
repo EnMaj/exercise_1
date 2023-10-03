@@ -1,7 +1,7 @@
-def prec(c):
-    if c == '*' or c == '/':
+def preor(c):
+    if c == "*" or c == "/":
         return 3
-    if c == '+' or c == '-':
+    if c == "+" or c == "-":
         return 4
     return 100
 
@@ -11,16 +11,16 @@ def infixToPostfix(infix):
     s = []
     postfix = ''
     for c in infix:
-        if c == '(':
+        if c == "(":
             s.append(c)
-        elif c == ')':
-            while s[-1] != '(':
+        elif c == ")":
+            while s[-1] != "(":
                 postfix += s.pop()
             s.pop()
         elif c.isdigit():
             postfix += c
         else:
-            while s and prec(c) >= prec(s[-1]):
+            while s and preor(c) >= preor(s[-1]):
                 postfix += s.pop()
             s.append(c)
     while s:
@@ -39,14 +39,13 @@ def evalPostfix(exp):
             y = stack.pop()
             if ch == '+':
                 stack.append(y + x)
-            elif ch == '-':
+            elif ch == "-":
                 stack.append(y - x)
-            elif ch == '*':
+            elif ch == "*":
                 stack.append(y * x)
-            elif ch == '/':
+            elif ch == "/":
                 stack.append(y // x)
     return stack.pop()
-
 
 
 infix = input()
